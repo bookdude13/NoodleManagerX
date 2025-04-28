@@ -204,11 +204,14 @@ namespace NoodleManagerX.Mods
                         {
                             if (entry.FullName != "LocalItem.json")
                             {
-                                if (StorageAbstraction.FileExists(entry.FullName))
+                                // The synth dir is the SynthRidersUC directory. We need to extract up a level.
+                                var entryRelPath = Path.Combine("..", entry.FullName);
+                                
+                                if (StorageAbstraction.FileExists(entryRelPath))
                                 {
-                                    MainViewModel.Log($"WARNING: Overwriting {entry.FullName}");
+                                    MainViewModel.Log($"WARNING: Overwriting {entryRelPath}");
                                     // TODO use a more generic function once modding is supported on Oculus
-                                    var fullPath = StorageAbstraction.GetFullComputerPath(entry.FullName);
+                                    var fullPath = StorageAbstraction.GetFullComputerPath(entryRelPath);
                                     entry.ExtractToFile(fullPath, true);
                                 }
                                 else
@@ -216,14 +219,14 @@ namespace NoodleManagerX.Mods
                                     if (String.IsNullOrEmpty(entry.Name))
                                     {
                                         // No file name, so directory
-                                        MainViewModel.Log($"Creating directory for {entry.FullName}");
-                                        await StorageAbstraction.CreateDirectory(entry.FullName);
+                                        MainViewModel.Log($"Creating directory for {entryRelPath}");
+                                        await StorageAbstraction.CreateDirectory(entryRelPath);
                                     }
                                     else
                                     {
-                                        MainViewModel.Log($"Extracting file {entry.FullName}");
+                                        MainViewModel.Log($"Extracting file {entryRelPath}");
                                         // TODO use a more generic function once modding is supported on Oculus
-                                        var fullPath = StorageAbstraction.GetFullComputerPath(entry.FullName);
+                                        var fullPath = StorageAbstraction.GetFullComputerPath(entryRelPath);
                                         entry.ExtractToFile(fullPath);
                                     }
                                 }
