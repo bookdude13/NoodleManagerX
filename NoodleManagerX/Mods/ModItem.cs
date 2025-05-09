@@ -264,8 +264,9 @@ namespace NoodleManagerX.Mods
                             {
                                 if (entry.FullName != "LocalItem.json")
                                 {
-                                    var fullPath = Path.Combine(MainViewModel.s_instance.settings.synthDirectory, entry.FullName);
-                                    if (StorageAbstraction.FileExists(entry.FullName))
+                                    var parentFileName = Path.Combine("..", entry.FullName);
+                                    var fullPath = Path.Combine(MainViewModel.s_instance.settings.synthDirectory, parentFileName);
+                                    if (StorageAbstraction.FileExists(parentFileName))
                                     {
                                         MainViewModel.Log("Deleting " + fullPath);
                                         StorageAbstraction.DeleteFile(fullPath);
