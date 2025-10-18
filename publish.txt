@@ -1,0 +1,1 @@
+﻿dotnet publish /p:Configuration=Release /p:PublishProfile=Windows_x64 .\NoodleManagerX\NoodleManagerX.csproj

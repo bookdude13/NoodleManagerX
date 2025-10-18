@@ -48,7 +48,7 @@ namespace NoodleManagerX.Models
             }
         }
 
-        public static async Task CreateDirectory(string path)
+        public static void CreateDirectory(string path)
         {
             if (MtpDevice.connected)
             {

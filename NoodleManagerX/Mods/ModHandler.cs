@@ -1,7 +1,6 @@
 ﻿using Avalonia.Threading;
 using DynamicData;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NoodleManagerX.Models;
 using NoodleManagerX.Models.Mods;
 using System;
@@ -9,14 +8,9 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
-using Semver;
-using NoodleManagerX.ThirdParty.MelonLoader;
 
 namespace NoodleManagerX.Mods
 {
@@ -232,7 +226,6 @@ namespace NoodleManagerX.Mods
 
         private async Task<List<ModInfo>> GetAvailableMods()
         {
-            MainViewModel.Log("Game version: " + GetCurrentGameVersion());
             int requestID = MainViewModel.s_instance.apiRequestCounter;
             Clear();
             try
@@ -278,29 +271,6 @@ namespace NoodleManagerX.Mods
                 Console.Error.WriteLine("Failed to deserialize mod list: " + e.Message);
                 return new();
             }
-        }
-
-        /// <summary>
-        /// Only used for spot checking version updates.
-        /// DON'T USE IN PROD BUILDS!
-        /// </summary>
-        /// <param name="availableMods"></param>
-        /// <returns></returns>
-        private List<ModInfo> ChangeVersionsForTest(List<ModInfo> availableMods)
-        {
-            var tmp = availableMods.First(info => info.Id == "SRModsList");
-            tmp.Versions.Add(new ModVersion
-            {
-                DownloadUrl = tmp.Versions[0].DownloadUrl,
-                Dependencies = tmp.Versions[0].Dependencies,
-                Version = new SemVersion(1, 2)
-            });
-            return availableMods;
-        }
-
-        private string GetCurrentGameVersion()
-        {
-            return UnityInformationHandler.GameVersion;
         }
     }
 }

@@ -47,7 +47,7 @@ namespace NoodleManagerX.Models
                     }
                     catch (Exception ex)
                     {
-                        MainViewModel.Log($"Failed to parse version '{versionStr}' for mod {hash}");
+                        MainViewModel.Log($"Failed to parse version '{versionStr}' for mod {hash}. {ex.Message}");
                     }
                 }
                 return null;

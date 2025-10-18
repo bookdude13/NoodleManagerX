@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using NoodleManagerX.Models.Playlists;
 using NoodleManagerX.Models.Stages;
 using NoodleManagerX.Mods;
-using NoodleManagerX.ThirdParty.MelonLoader;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SharpAdbClient;
@@ -35,10 +34,8 @@ namespace NoodleManagerX.Models
 {
     class MainViewModel : ReactiveObject
     {
-        //dotnet publish -c Release -f net8.0 -r win-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net8.0 -r linux-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net8.0 -r osx-x64 --self-contained true /p:PublishSingleFile=true  -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-
+        // Has a pre-build step to build the UpdateHelper and put it in Resources.
+        //dotnet publish /p:Configuration=Release /p:PublishProfile=Windows_x64 .\NoodleManagerX\NoodleManagerX.csproj
 
         //Todo:
         //get description when rightclicking an item and display in context menu
@@ -312,8 +309,7 @@ namespace NoodleManagerX.Models
                 // synthDirectory should be set by now
                 if (directoryValid)
                 {
-                    var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
-                    UnityInformationHandler.Setup(gameDataDir);
+                    // var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
                 }
 
                 this.WhenAnyValue(x => x.synthDirectory).Skip(1).Subscribe(x =>
@@ -322,8 +318,7 @@ namespace NoodleManagerX.Models
                     if (settings.synthDirectory != synthDirectory && directoryValid)
                     {
                         settings.synthDirectory = synthDirectory;
-                        var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
-                        UnityInformationHandler.Setup(gameDataDir);
+                        // var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
                         ReloadLocalSources(true);
                     }
                 });

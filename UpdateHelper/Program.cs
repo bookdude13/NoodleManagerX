@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Security.Principal;
@@ -10,6 +11,7 @@ namespace UpdateHelper
 {
     internal class Program
     {
+        [RequiresUnreferencedCode("Calls System.Reflection.MethodBase.GetCurrentMethod()")]
         static void Main(string[] args)
         {
             try
@@ -27,7 +29,7 @@ namespace UpdateHelper
 
                     string targetPath = args[0].Trim('\"');
 
-                    string tmpPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "NoodleManagerX.exe");
+                    string tmpPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!, "NoodleManagerX.exe");
                     Log("Updating from " + tmpPath + " to " + targetPath);
 
                     bool canWrite = false;
@@ -58,9 +60,10 @@ namespace UpdateHelper
             catch (Exception e) { Log(MethodBase.GetCurrentMethod(), e); }
         }
 
-        public static void Log(MethodBase m, Exception e)
+        [RequiresUnreferencedCode("Calls System.Exception.TargetSite")]
+        public static void Log(MethodBase? m, Exception e)
         {
-            Log("Error " + m.Name + " " + e.Message + Environment.NewLine + e.TargetSite + Environment.NewLine + e.StackTrace);
+            Log("Error " + m?.Name + " " + e.Message + Environment.NewLine + e.TargetSite + Environment.NewLine + e.StackTrace);
         }
 
         public static void Log(string message)
@@ -69,7 +72,8 @@ namespace UpdateHelper
             {
                 Console.WriteLine(message);
 
-                string directory = Path.Combine(Environment.GetFolderPath(SpecialFolder.ApplicationData), "NoodleManagerX");
+                string directory = Path.Combine(Environment.GetFolderPath(SpecialFolder.ApplicationData),
+                    "NoodleManagerX");
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
@@ -80,7 +84,10 @@ namespace UpdateHelper
                     sw.Write(DateTime.Now.ToString("dd'.'MM HH':'mm':'ss") + "     " + message + Environment.NewLine);
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to write log: " + e.Message);
+            }
         }
     }
 }
