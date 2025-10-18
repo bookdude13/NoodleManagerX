@@ -708,8 +708,8 @@
 		</Grid>
 
 		<!--Progress bar-->
-		<Grid Grid.Row="2" Height="10" ToolTip.Tip="{Binding progressText}" ToolTip.VerticalOffset="-2" ToolTip.HorizontalOffset="16" IsVisible="{Binding Path=selectedTabIndex, Converter={StaticResource EqualsConverter}, ConverterParameter=0-1-2-3-4}">
-			<ProgressBar Height="2" MinHeight="2" Foreground="green" Background="{StaticResource BackgroundColor}" Value="{Binding Path=progress}" VerticalAlignment="Top"/>
+		<Grid Grid.Row="2" Height="30" ToolTip.Tip="{Binding progressText}" ToolTip.VerticalOffset="-2" ToolTip.HorizontalOffset="16" IsVisible="{Binding Path=selectedTabIndex, Converter={StaticResource EqualsConverter}, ConverterParameter=0-1-2-3-4}">
+			<ProgressBar Height="20" MinHeight="20" Foreground="green" Background="{StaticResource BackgroundColor}" Value="{Binding Path=progress}" VerticalAlignment="Top"/>
 		</Grid>
 
 		<!--Tab content-->
