@@ -136,7 +136,7 @@ namespace NoodleManagerX.Mods
 
             try
             {
-                string url = ModDownloadSource.GetModItemBaseDownloadUrl() + "/" + modVersion.DownloadUrl;
+                string url = ModDownloadSource.ModItemBaseDownloadUrl + "/" + modVersion.DownloadUrl;
                 MainViewModel.Log($"Downloading from {url}");
 
                 using HttpClient client = new HttpClient();

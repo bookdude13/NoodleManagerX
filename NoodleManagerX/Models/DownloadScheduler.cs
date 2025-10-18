@@ -68,7 +68,7 @@ namespace NoodleManagerX.Models
             {
                 _ = Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainViewModel.s_instance.progress = Math.Min(100 - (int)((queue.Count + downloading.Count) / (toDownload * 0.01f)), 1);
+                    MainViewModel.s_instance.progress = Math.Min(100 - (int)((queue.Count + downloading.Count) / (toDownload * 0.01f)), 100);
                     MainViewModel.s_instance.progressText = "Downloading: " + MainViewModel.s_instance.progress + "% [" + downloading.Count + 1 + "](" + (toDownload - queue.Count) + "/" + toDownload + ")";
                 });
             }

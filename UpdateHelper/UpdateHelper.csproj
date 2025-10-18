@@ -2,13 +2,14 @@
 
   <PropertyGroup>
 	  <OutputType>WinExe</OutputType>
-	  <TargetFrameworks>net5.0-windows</TargetFrameworks>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	  <PublishTrimmed>true</PublishTrimmed>
 	  <TrimMode>link</TrimMode>
 	  <DebugType>embedded</DebugType>
 	  <Platforms>AnyCPU;x84</Platforms>
+	  <Nullable>enable</Nullable>
+	  <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
