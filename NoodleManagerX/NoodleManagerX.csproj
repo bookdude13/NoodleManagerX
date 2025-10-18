@@ -8,7 +8,6 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
     <ApplicationIcon>icon-nm.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
@@ -18,6 +17,8 @@
     <Platforms>AnyCPU;x64</Platforms>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <StartupObject />
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
