@@ -11,9 +11,9 @@
     <ApplicationIcon>icon-nm.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-	<PublishTrimmed>true</PublishTrimmed>
-    <TrimMode>link</TrimMode>
-    <IsTrimmable>true</IsTrimmable>
+<!--	<PublishTrimmed>true</PublishTrimmed>-->
+<!--    <TrimMode>link</TrimMode>-->
+    <IsTrimmable>false</IsTrimmable>
     <DebugType>embedded</DebugType>
     <Platforms>AnyCPU;x64</Platforms>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
