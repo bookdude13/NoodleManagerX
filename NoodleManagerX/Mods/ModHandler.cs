@@ -239,7 +239,7 @@ namespace NoodleManagerX.Mods
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string requestUrl = ModDownloadSource.GetModsBaseUrl() + "/mods.json";
+                    string requestUrl = ModDownloadSource.ModsBaseUrl + "/mods.json";
                     MainViewModel.Log($"Getting mod list from {requestUrl}");
                     string rawResponse = await client.GetStringAsync(requestUrl);
                     if (MainViewModel.s_instance.apiRequestCounter != requestID)

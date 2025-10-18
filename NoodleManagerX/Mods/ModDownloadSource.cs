@@ -9,20 +9,16 @@ namespace NoodleManagerX.Mods
 {
     class ModDownloadSource
     {
-        public static string GetModItemBaseDownloadUrl()
-        {
-            return $"{GetModsBaseUrl()}/Downloads";
-        }
+        public static string ModsBaseUrl =
+            "https://raw.githubusercontent.com/bookdude13/SRModsList/master/SynthRiders";
 
-        public static string GetModsBaseUrl()
-        {
-            return $"https://raw.githubusercontent.com/bookdude13/SRModsList/{GetModListBranch()}/SynthRiders";
-        }
+        public static string ModItemBaseDownloadUrl = $"{ModsBaseUrl}/Downloads";
 
-        private static string GetModListBranch()
-        {
-            var usingBetas = MainViewModel.s_instance?.settings?.getBetas ?? false;
-            return usingBetas ? "dev" : "master";
-        }
+
+        // private static string GetModListBranch()
+        // {
+        //     var usingBetas = MainViewModel.s_instance?.settings?.getBetas ?? false;
+        //     return usingBetas ? "dev" : "master";
+        // }
     }
 }
