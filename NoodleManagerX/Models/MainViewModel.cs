@@ -35,9 +35,9 @@ namespace NoodleManagerX.Models
 {
     class MainViewModel : ReactiveObject
     {
-        //dotnet publish -c Release -f net5.0 -r win-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net5.0 -r linux-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net5.0 -r osx-x64 --self-contained true /p:PublishSingleFile=true  -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
+        //dotnet publish -c Release -f net8.0 -r win-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
+        //dotnet publish -c Release -f net8.0 -r linux-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
+        //dotnet publish -c Release -f net8.0 -r osx-x64 --self-contained true /p:PublishSingleFile=true  -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
 
 
         //Todo:
@@ -55,7 +55,7 @@ namespace NoodleManagerX.Models
         public const int TAB_AVATARS = 3;
         public const int TAB_MODS = 4;
 
-        [Reactive] private string version { get; set; } = "V1.1.5";
+        [Reactive] private string version { get; set; } = "V2.0.0";
 
         public static MainViewModel s_instance;
 
@@ -291,84 +291,7 @@ namespace NoodleManagerX.Models
 
                 if (!settings.ignoreUpdates)
                 {
-                    try
-                    {
-                        Octokit.GitHubClient github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("NoodleManagerX"));
-                        var all = github.Repository.Release.GetAll("tommaier123", "NoodleManagerX").Result;
-                        if (!settings.getBetas) all = all.Where(x => x.Prerelease == false).ToList();
-                        var latest = all.OrderByDescending(x => Int32.Parse(x.TagName.Substring(1).Replace(".", ""))).FirstOrDefault();
-
-                        if (latest != null)
-                        {
-                            if (Int32.Parse(version.Substring(1).Replace(".", "")) < Int32.Parse(latest.TagName.Substring(1).Replace(".", "")))
-                            {
-                                Log("Update available to: " + latest.TagName);
-
-                                string beta = "";
-                                if (latest.Prerelease) beta = "Note: This is a beta version and may contain bugs" + Environment.NewLine;
-
-                                var res = await Dispatcher.UIThread.InvokeAsync(async () =>
-                                {
-                                    return await MessageBox.Show(MainWindow.s_instance, "New Update to " + latest.TagName + " available:" + Environment.NewLine + beta + Environment.NewLine + latest.Body + Environment.NewLine + Environment.NewLine + "Do you want to Download it?", "Update Available", MessageBox.MessageBoxButtons.OkCancel);
-                                });
-
-                                if (res == MessageBox.MessageBoxResult.Ok)
-                                {
-                                    using (var client = new WebClient())
-                                    {
-                                        client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
-                                        {
-                                            _ = Dispatcher.UIThread.InvokeAsync(() =>
-                                         {
-                                             progress = e.ProgressPercentage;
-                                             progressText = "Updating: " + progress + "%";
-                                         });
-                                        };
-                                        string temp = Path.GetTempPath();
-                                        string location = Path.Combine(temp, "NoodleManagerX.exe");
-                                        string locationHelper = Path.Combine(temp, "UpdateHelper.exe");
-                                        Log("Writing update files to " + temp);
-                                        if (System.IO.File.Exists(location)) System.IO.File.Delete(location);
-                                        await client.DownloadFileTaskAsync("https://github.com/tommaier123/NoodleManagerX/releases/download/" + latest.TagName + "/NoodleManagerX.exe", location);
-
-                                        using (Stream resourceFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("NoodleManagerX.Resources.UpdateHelper.exe"))
-                                        using (System.IO.FileStream fs = System.IO.File.Open(locationHelper, System.IO.FileMode.Create))
-                                        {
-                                            await resourceFile.CopyToAsync(fs);
-                                        }
-
-                                        string filename = Process.GetCurrentProcess().MainModule.FileName;
-                                        Process proc = new Process();
-                                        proc.StartInfo.FileName = locationHelper;
-                                        proc.StartInfo.Arguments = "\"" + filename + "\"";
-                                        proc.StartInfo.UseShellExecute = true;
-
-                                        string testfile = Path.Combine(Path.GetDirectoryName(filename), "NmUpdate_can_be_deleted");
-                                        try
-                                        {
-                                            using (System.IO.FileStream fs = System.IO.File.Open(testfile, System.IO.FileMode.Create)) { }
-                                        }
-                                        catch (UnauthorizedAccessException)
-                                        {
-                                            Log("Needs admin permissions to update");
-                                            proc.StartInfo.Verb = "runas";
-                                        }
-                                        catch { }
-                                        finally { try { System.IO.File.Delete(testfile); } catch { } }
-
-                                        proc.Start();
-
-                                        await Dispatcher.UIThread.InvokeAsync(() =>
-                                        {
-                                            closing = true;
-                                            MainWindow.s_instance.Close();
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e) { Log(MethodBase.GetCurrentMethod(), e); }
+                    await TryUpdate();
                 }
 
                 settings.Changed.Subscribe(x => { SaveSettings(); });//save the settings when they change
@@ -425,6 +348,106 @@ namespace NoodleManagerX.Models
                 initialized = true;
                 _ = GetPage();
             });
+        }
+
+        private async Task TryUpdate()
+        {
+            try
+            {
+                Octokit.GitHubClient github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("NoodleManagerX"));
+                var all = github.Repository.Release.GetAll("bookdude13", "NoodleManagerX").Result;
+                if (!settings.getBetas)
+                {
+                    all = all.Where(x => x.Prerelease == false).ToList();
+                }
+                
+                // Release tags are in format VX.Y.Z
+                // This assumes X,Y,Z are never more than one digit
+                var latest = all.OrderByDescending(x => Int32.Parse(x.TagName.Substring(1).Replace(".", ""))).FirstOrDefault();
+                if (latest == null)
+                {
+                    return;
+                }
+                
+                // Assume version is of form VX.Y.Z
+                int versionNumber = Int32.Parse(version.Substring(1).Replace(".", ""));
+                int latestVersionNumber = Int32.Parse(latest.TagName.Substring(1).Replace(".", ""));
+                Log($"Current version is {versionNumber}, latest is {latestVersionNumber}");
+
+                if (versionNumber < latestVersionNumber)
+                {
+                    Log("Update available to: " + latest.TagName);
+
+                    string beta = "";
+                    if (latest.Prerelease)
+                    {
+                        beta = "Note: This is a beta version and may contain bugs" + Environment.NewLine;
+                    }
+
+                    var res = await Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        return await MessageBox.Show(MainWindow.s_instance, "New Update to " + latest.TagName + " available:" + Environment.NewLine + beta + Environment.NewLine + latest.Body + Environment.NewLine + Environment.NewLine + "Do you want to Download it?", "Update Available", MessageBox.MessageBoxButtons.OkCancel);
+                    });
+
+                    if (res == MessageBox.MessageBoxResult.Ok)
+                    {
+                        using (var client = new WebClient())
+                        {
+                            client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                            {
+                                _ = Dispatcher.UIThread.InvokeAsync(() =>
+                             {
+                                 progress = e.ProgressPercentage;
+                                 progressText = "Updating: " + progress + "%";
+                             });
+                            };
+                            string temp = Path.GetTempPath();
+                            string location = Path.Combine(temp, "NoodleManagerX.exe");
+                            string locationHelper = Path.Combine(temp, "UpdateHelper.exe");
+                            Log("Writing update files to " + temp);
+                            if (System.IO.File.Exists(location))
+                            {
+                                System.IO.File.Delete(location);
+                            }
+                            await client.DownloadFileTaskAsync("https://github.com/bookdude13/NoodleManagerX/releases/download/" + latest.TagName + "/NoodleManagerX.exe", location);
+
+                            using (Stream resourceFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("NoodleManagerX.Resources.UpdateHelper.exe"))
+                            using (System.IO.FileStream fs = System.IO.File.Open(locationHelper, System.IO.FileMode.Create))
+                            {
+                                await resourceFile.CopyToAsync(fs);
+                            }
+
+                            string filename = Process.GetCurrentProcess().MainModule.FileName;
+                            Process proc = new Process();
+                            proc.StartInfo.FileName = locationHelper;
+                            proc.StartInfo.Arguments = "\"" + filename + "\"";
+                            proc.StartInfo.UseShellExecute = true;
+
+                            string testfile = Path.Combine(Path.GetDirectoryName(filename), "NmUpdate_can_be_deleted");
+                            try
+                            {
+                                using (System.IO.FileStream fs = System.IO.File.Open(testfile, System.IO.FileMode.Create)) { }
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
+                                Log("Needs admin permissions to update");
+                                proc.StartInfo.Verb = "runas";
+                            }
+                            catch { }
+                            finally { try { System.IO.File.Delete(testfile); } catch { } }
+
+                            proc.Start();
+
+                            await Dispatcher.UIThread.InvokeAsync(() =>
+                            {
+                                closing = true;
+                                MainWindow.s_instance.Close();
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception e) { Log(MethodBase.GetCurrentMethod(), e); }
         }
 
         public void ReloadLocalSources(bool directoryChanged = false)
