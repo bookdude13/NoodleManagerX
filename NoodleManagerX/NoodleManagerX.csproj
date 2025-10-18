@@ -24,20 +24,20 @@
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AssetsTools.NET" Version="2.0.12" />
+    <PackageReference Include="AssetsTools.NET" Version="3.0.2" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="0.10.18" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.10.0" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.0" />
     <PackageReference Include="MediaDevices" Version="1.10.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Octokit" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
-    <PackageReference Include="Semver" Version="2.3.0" />
+    <PackageReference Include="Semver" Version="3.0.0" />
     <PackageReference Include="SharpAdbClient" Version="2.3.23" />
-    <PackageReference Include="YoutubeExplode" Version="6.4.0" />
+    <PackageReference Include="YoutubeExplode" Version="6.5.5" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\Included\*.ttf" />

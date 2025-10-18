@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using NoodleManagerX.Models.Playlists;
 using NoodleManagerX.Models.Stages;
 using NoodleManagerX.Mods;
-using NoodleManagerX.ThirdParty.MelonLoader;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SharpAdbClient;
@@ -312,8 +311,7 @@ namespace NoodleManagerX.Models
                 // synthDirectory should be set by now
                 if (directoryValid)
                 {
-                    var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
-                    UnityInformationHandler.Setup(gameDataDir);
+                    // var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
                 }
 
                 this.WhenAnyValue(x => x.synthDirectory).Skip(1).Subscribe(x =>
@@ -322,8 +320,7 @@ namespace NoodleManagerX.Models
                     if (settings.synthDirectory != synthDirectory && directoryValid)
                     {
                         settings.synthDirectory = synthDirectory;
-                        var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
-                        UnityInformationHandler.Setup(gameDataDir);
+                        // var gameDataDir = Path.Combine(Path.GetDirectoryName(synthDirectory), "SynthRiders_Data");
                         ReloadLocalSources(true);
                     }
                 });
