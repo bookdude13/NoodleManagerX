@@ -185,12 +185,12 @@ namespace NoodleManagerX.Mods
             return baseModPath;
         }
 
-        private async Task<bool> ExtractModFilesToSynthDir(string synthmodPath)
+        private Task<bool> ExtractModFilesToSynthDir(string synthmodPath)
         {
             if (MtpDevice.connected)
             {
                 MainViewModel.s_instance.OpenErrorDialog("Cannot download mod while MTP device (Oculus) is connected!");
-                return false;
+                return Task.FromResult(false);
             }
 
             try
@@ -220,7 +220,7 @@ namespace NoodleManagerX.Mods
                                     {
                                         // No file name, so directory
                                         MainViewModel.Log($"Creating directory for {entryRelPath}");
-                                        await StorageAbstraction.CreateDirectory(entryRelPath);
+                                        StorageAbstraction.CreateDirectory(entryRelPath);
                                     }
                                     else
                                     {
@@ -235,11 +235,11 @@ namespace NoodleManagerX.Mods
                     }
                 }
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception e) { MainViewModel.Log(MethodBase.GetCurrentMethod(), e); }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         public override bool Delete(string filename)

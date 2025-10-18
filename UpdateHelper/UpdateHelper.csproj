@@ -6,12 +6,12 @@
 	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	  <PublishTrimmed>true</PublishTrimmed>
 	  <TrimMode>link</TrimMode>
+	  <IsTrimmed>true</IsTrimmed>
 	  <DebugType>embedded</DebugType>
-	  <Platforms>AnyCPU;x84</Platforms>
+	  <Platforms>AnyCPU;x64</Platforms>
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
   </ItemGroup>

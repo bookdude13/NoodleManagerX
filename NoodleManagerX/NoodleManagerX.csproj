@@ -13,12 +13,15 @@
 	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	<PublishTrimmed>true</PublishTrimmed>
     <TrimMode>link</TrimMode>
+    <IsTrimmable>true</IsTrimmable>
     <DebugType>embedded</DebugType>
     <Platforms>AnyCPU;x64</Platforms>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <StartupObject />
     <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
@@ -63,6 +66,12 @@
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\UpdateHelper\UpdateHelper.csproj" />
+	</ItemGroup>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="dotnet publish /p:Configuration=Release /p:PublishProfile=Windows_x64 ..\UpdateHelper\UpdateHelper.csproj" />
+	</Target>
 	
 <!--
   <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'or'$(Configuration)'=='DEBUG'">

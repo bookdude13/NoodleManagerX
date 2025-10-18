@@ -34,10 +34,8 @@ namespace NoodleManagerX.Models
 {
     class MainViewModel : ReactiveObject
     {
-        //dotnet publish -c Release -f net8.0 -r win-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net8.0 -r linux-x64 --self-contained true /p:PublishSingleFile=true -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-        //dotnet publish -c Release -f net8.0 -r osx-x64 --self-contained true /p:PublishSingleFile=true  -p:PublishTrimmed=True -p:TrimMode=Link -p:PublishReadyToRun=false
-
+        // Has a pre-build step to build the UpdateHelper and put it in Resources.
+        //dotnet publish /p:Configuration=Release /p:PublishProfile=Windows_x64 .\NoodleManagerX\NoodleManagerX.csproj
 
         //Todo:
         //get description when rightclicking an item and display in context menu
